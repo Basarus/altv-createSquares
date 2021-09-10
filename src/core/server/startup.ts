@@ -37,6 +37,8 @@ function createSquares(player: alt.Player = null, coords1: any, coords2: any, wi
     }
 }
 
+// Пример вызова функции
+
 createSquares(null, {x: -2361.57275390625, y: 387.47222900390625, z: -10},  {x: 1369.6387939453125, y: -2599.55859375, z: 0}, 500, 100) 
 
 alt.on('entityEnterColshape', (colshape: alt.Colshape, entity: any) => {
