@@ -21,9 +21,6 @@ interface IColsape{
 
 let staticData: Array<IColsape> = []; 
 
-const WIGHT: number = 500;
-const HEIGHT: number = 1000;
-
 /**
  * Функция заполняет поле квадратами;
  * @param player - не обязательный параметр (если будете создавать через команду)
@@ -71,6 +68,8 @@ function findSquare (coords1: alt.Vector3, coords2: alt.Vector3, wight: number) 
 
 // Пример вызова функции
 
+const WIGHT: number = 500;
+const HEIGHT: number = 1000;
 const coords1 : any =  {x: -4000.77949523925781, y: 9000.2919921875, z: -5.05659818649292}
 const coords2 : any =  {x: 4211.6865234375, y: -6558.10498046875,  z: 0.42127108573913574}
 
