@@ -1,6 +1,7 @@
 import * as alt from 'alt-server';
 import { ReconnectHelper } from './utility/reconnect';
 
+
 alt.on('playerConnect', handlePlayerConnect);
 
 function handlePlayerConnect(player: alt.Player) {
@@ -11,6 +12,9 @@ function handlePlayerConnect(player: alt.Player) {
 }
 
 let staticData = []; 
+
+const WIGHT: number = 500;
+const HEIGHT: number = 1000;
 
 /**
  * Функция заполняет поле квадратами;
@@ -27,7 +31,7 @@ function createSquares(player: alt.Player = null, coords1: any, coords2: any, wi
     for (let index = squaresLength; index--;) {
     let coordsLeft = {x: currentCoords.x - wight / 2, y: currentCoords.y + wight /2 , z: currentCoords.z}
     let coordsRight = {x: currentCoords.x + wight /2, y: currentCoords.y - wight / 2, z: currentCoords.z}
-    const colshape = new alt.ColshapeCuboid(coordsLeft.x, coordsLeft.y, coordsLeft.z - 100, coordsRight.x, coordsRight.y, height);
+    const colshape = new alt.ColshapeCuboid(coordsLeft.x, coordsLeft.y, coordsLeft.z - 200, coordsRight.x, coordsRight.y, height);
     colshape.setMeta(`colshape`, index)
     staticData.push({coords: {...currentCoords}, size: wight})
     if (currentCoords.x >= coords2.x) {
@@ -39,7 +43,7 @@ function createSquares(player: alt.Player = null, coords1: any, coords2: any, wi
 
 // Пример вызова функции
 
-createSquares(null, {x: -2361.57275390625, y: 387.47222900390625, z: -10},  {x: 1369.6387939453125, y: -2599.55859375, z: 0}, 500, 100) 
+createSquares(null, {x: -4000.77949523925781, y: 9000.2919921875, z: -5.05659818649292},  {x: 4211.6865234375, y: -6558.10498046875, z: 0.42127108573913574}, WIGHT, HEIGHT) 
 
 alt.on('entityEnterColshape', (colshape: alt.Colshape, entity: any) => {
        console.log(entity.name, `Вошел в зону ${colshape.getMeta('colshape')}`)

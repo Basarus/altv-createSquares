@@ -1,20 +1,6 @@
 import * as alt from 'alt-client';
 import * as native from 'natives';
 
-alt.onServer('log:Console', handleLogConsole);
-
-const player = alt.Player.local
-
-function handleLogConsole(msg: string) {
-    alt.log(msg);
-}
-
-alt.on('consoleCommand', (msg: string, args: any) => {
-if (msg === 'coords'){
-    alt.log(`{x: ${player.pos.x}, y: ${player.pos.y}, z: ${player.pos.z}}`)
-}
-})
-
 let staticData = []
 
 alt.onServer('client::colsape:create', (coords: any, size: number) => {
