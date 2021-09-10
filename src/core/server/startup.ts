@@ -35,7 +35,7 @@ const HEIGHT: number = 1000;
 
 function createSquares(coords1: alt.Vector3, coords2: alt.Vector3, wight: number = 500, height: number = 1000): void {
     
-    let square = squaresLength(coords1, coords2, wight)
+    let square = findSquare(coords1, coords2, wight)
     
     let currentCoords : any = {...coords1}; 
 
@@ -62,7 +62,7 @@ function findAngles(coords: alt.Vector3, wight: number)  {
       return [coords1, coords2]
 }
 
-function squaresLength (coords1: alt.Vector3, coords2: alt.Vector3, wight: number) : number {
+function findSquare (coords1: alt.Vector3, coords2: alt.Vector3, wight: number) : number {
     let width = (coords1.x - coords2.x) / wight;
     let height = (coords1.y - coords2.y) / wight;
     let square = Math.floor(Math.abs(width * height))
