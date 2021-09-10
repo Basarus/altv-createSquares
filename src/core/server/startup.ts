@@ -11,7 +11,15 @@ function handlePlayerConnect(player: alt.Player) {
     alt.emitClient(player, 'log:Console', 'alt:V Server - Boilerplate Started');
 }
 
-let staticData = []; 
+// Код
+
+interface IColsape{
+    colshape: alt.Colshape
+    coords: alt.Vector3;
+    wight: number
+}
+
+let staticData: Array<IColsape> = []; 
 
 const WIGHT: number = 500;
 const HEIGHT: number = 1000;
@@ -25,39 +33,65 @@ const HEIGHT: number = 1000;
  * @param height - высота одного внутреннего квадрата (по умолчанию 1000 для наглядности)
  */
 
-function createSquares(player: alt.Player = null, coords1: any, coords2: any, wight: number = 500, height: number = 1000): void {
-    let squaresLength = Number(Math.abs((coords1.x - coords2.x) / wight * (coords1.y - coords2.y) / wight).toFixed())
-    let currentCoords = {...coords1};
-    for (let index = squaresLength; index--;) {
-    let coordsLeft = {x: currentCoords.x - wight / 2, y: currentCoords.y + wight /2 , z: currentCoords.z}
-    let coordsRight = {x: currentCoords.x + wight /2, y: currentCoords.y - wight / 2, z: currentCoords.z}
-    const colshape = new alt.ColshapeCuboid(coordsLeft.x, coordsLeft.y, coordsLeft.z - 200, coordsRight.x, coordsRight.y, height);
+function createSquares(coords1: alt.Vector3, coords2: alt.Vector3, wight: number = 500, height: number = 1000): void {
+    
+    let square = squaresLength(coords1, coords2, wight)
+    
+    let currentCoords : any = {...coords1}; 
+
+    for (let index = square; index--;) {
+
+    let [left, right] = findAngles(currentCoords, wight)
+
+    const colshape = new alt.ColshapeCuboid(left.x, left.y, left.z - 200, right.x, right.y, height);
     colshape.setMeta(`colshape`, index)
-    staticData.push({coords: {...currentCoords}, size: wight})
+
+    staticData.push({colshape, coords: {...currentCoords}, wight})
+
     if (currentCoords.x >= coords2.x) {
         currentCoords.x = coords1.x;
         currentCoords.y -= wight
     } else currentCoords.x += wight
+
     }
+}
+
+function findAngles(coords: alt.Vector3, wight: number)  {
+      let coords1 = {x: coords.x - wight / 2, y: coords.y + wight / 2 , z: coords.z};
+      let coords2 = {x: coords.x + wight / 2, y: coords.y - wight / 2, z: coords.z};
+      return [coords1, coords2]
+}
+
+function squaresLength (coords1: alt.Vector3, coords2: alt.Vector3, wight: number) : number {
+    let width = (coords1.x - coords2.x) / wight;
+    let height = (coords1.y - coords2.y) / wight;
+    let square = Math.floor(Math.abs(width * height))
+    return square
 }
 
 // Пример вызова функции
 
-createSquares(null, {x: -4000.77949523925781, y: 9000.2919921875, z: -5.05659818649292},  {x: 4211.6865234375, y: -6558.10498046875, z: 0.42127108573913574}, WIGHT, HEIGHT) 
+const coords1 : any =  {x: -4000.77949523925781, y: 9000.2919921875, z: -5.05659818649292}
+const coords2 : any =  {x: 4211.6865234375, y: -6558.10498046875,  z: 0.42127108573913574}
 
-alt.on('entityEnterColshape', (colshape: alt.Colshape, entity: any) => {
-       console.log(entity.name, `Вошел в зону ${colshape.getMeta('colshape')}`)
+createSquares(coords1, coords2, WIGHT, HEIGHT) 
+
+// Пример вызова функции
+
+
+alt.on('entityEnterColshape', (colshape: alt.Colshape, player: alt.Player) => {
+      console.log(player.name, `Вошел в зону ${colshape.getMeta('colshape')}`)
 })
 
-alt.on('entityLeaveColshape', (colshape: alt.Colshape, entity: any) => {
-        console.log(entity.name, `Вышел из зоны ${colshape.getMeta('colshape')}`)
+alt.on('entityLeaveColshape', (colshape: alt.Colshape, player: alt.Player) => {
+      console.log(player.name, `Вышел из зоны ${colshape.getMeta('colshape')}`)
 })
 
 alt.on('playerConnect', (player: alt.Player) => {
-    for (const colshape of staticData) {
-        alt.emitClient(player, 'client::colsape:create', colshape.coords, colshape.size)
-    }
+    staticData.forEach(colshape => alt.emitClient(player, 'client::colsape:create', colshape.coords, colshape.wight))
 })
+
+// Код
 
 
 ReconnectHelper.invoke();
